@@ -44,7 +44,7 @@ jobs:
           cd tmp
 
           BUNDLE_GEMFILE=${{ github.workspace }}/${{ matrix.gemfile }} \
-            bundle exec rails new app -M -O -C -T -J
+            bundle exec rails new app -G -M -O -C -T -J
           cd app
 
           echo >> Gemfile
