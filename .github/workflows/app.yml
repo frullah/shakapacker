@@ -43,11 +43,11 @@ jobs:
         id: rails
 
       - name: create new rails app
-        working-directory: ./tmp
+        working-directory: tmp
         run: bundle exec rails new app -G -M -O -C -T -J --minimal --skip-bundle
 
       - name: install webpacker
-        working-directory: ./tmp/app
+        working-directory: tmp/app
         env:
           BUNDLE_GEMFILE:
         run: |
@@ -59,7 +59,7 @@ jobs:
           bin/rails webpacker:install
 
       - name: run webpacker
-        working-directory: ./tmp/app
+        working-directory: tmp/app
         env:
           BUNDLE_GEMFILE:
         run: bin/webpacker
