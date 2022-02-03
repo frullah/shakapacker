@@ -44,10 +44,12 @@ jobs:
           cd tmp
 
           BUNDLE_GEMFILE=${{ github.workspace }}/${{ matrix.gemfile }} \
-            bundle exec rails new app -G -M -O -C -T -J
+            bundle exec rails new app -G -M -O -C -T -J --minimal
           cd app
 
+          sed '/gem "rails"/d' Gemfile -i
           echo >> Gemfile
+          echo 'eval_gemfile "${{ github.workspace }}/${{ matrix.gemfile }}"' >> Gemfile
           echo 'gem "shakapacker", path: "../../"' >> Gemfile
           bundle install
           bin/rails webpacker:install
