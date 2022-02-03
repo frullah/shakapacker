@@ -27,8 +27,9 @@ jobs:
         #     os: ubuntu-latest
         #     gemfile: gemfiles/Gemfile-rails.5.2.x
 
-    # env:
-    #   BUNDLE_GEMFILE: ${{ github.workspace }}/${{ matrix.gemfile }}
+    env:
+      BUNDLE_GEMFILE: ${{ github.workspace }}/${{ matrix.gemfile }}
+      
 
     steps:
       - uses: actions/checkout@v2
@@ -36,21 +37,23 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
-        env:
-          BUNDLE_GEMFILE: ${{ github.workspace }}/${{ matrix.gemfile }}
+
+      - name: get gemfile rails version
+        run: echo "::set-output name=version::$(grep -P '^gem "rails".*' $BUNDLE_GEMFILE)"
+        id: rails
 
       - run: |
           mkdir tmp
           cd tmp
 
-          BUNDLE_GEMFILE=${{ github.workspace }}/${{ matrix.gemfile }} \
-            bundle exec rails new app -G -M -O -C -T -J --minimal
+          bundle exec rails new app -G -M -O -C -T -J --minimal --skip-bundle
           cd app
 
-          sed '/gem "rails"/d' Gemfile -i
+          export BUNDLE_GEMFILE=
+          sed -e 's/gem .rails..*/gem "rails"/' Gemfile -i
           echo >> Gemfile
-          echo 'eval_gemfile "${{ github.workspace }}/${{ matrix.gemfile }}"' >> Gemfile
           echo 'gem "shakapacker", path: "../../"' >> Gemfile
+          cat Gemfile
           bundle install
           bin/rails webpacker:install
 
