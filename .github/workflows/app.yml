@@ -43,8 +43,10 @@ jobs:
         id: rails
 
       - name: create new rails app
-        working-directory: tmp
-        run: bundle exec rails new app -G -M -O -C -T -J --minimal --skip-bundle
+        run: |
+          mkdir tmp
+          cd tmp
+          bundle exec rails new app -G -M -O -C -T -J --minimal --skip-bundle
 
       - name: install webpacker
         working-directory: tmp/app
