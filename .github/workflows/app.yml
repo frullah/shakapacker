@@ -42,14 +42,15 @@ jobs:
         run: echo "::set-output name=version::$(grep -P '^gem "rails".*' $BUNDLE_GEMFILE)"
         id: rails
 
-      - run: |
-          mkdir tmp
-          cd tmp
+      - name: create new rails app
+        working-directory: ./tmp
+        run: bundle exec rails new app -G -M -O -C -T -J --minimal --skip-bundle
 
-          bundle exec rails new app -G -M -O -C -T -J --minimal --skip-bundle
-          cd app 
-
-          export BUNDLE_GEMFILE=
+      - name: install webpacker
+        working-directory: ./tmp/app
+        env:
+          BUNDLE_GEMFILE:
+        run: |
           sed -e 's;gem .rails..*;${{ steps.rails.outputs.version }};' Gemfile -i
           echo >> Gemfile
           echo 'gem "shakapacker", path: "../../"' >> Gemfile
@@ -57,4 +58,8 @@ jobs:
           bundle install
           bin/rails webpacker:install
 
-          bin/webpacker
+      - name: run webpacker
+        working-directory: ./tmp/app
+        env:
+          BUNDLE_GEMFILE:
+        run: bin/webpacker
