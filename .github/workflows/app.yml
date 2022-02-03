@@ -15,14 +15,14 @@ jobs:
           - gemfiles/Gemfile-rails.6.0.x
           - gemfiles/Gemfile-rails.6.1.x
           - gemfiles/Gemfile-rails.7.0.x
-          - gemfiles/Gemfile-rails-edge
+          # - gemfiles/Gemfile-rails-edge
         exclude:
           - ruby: 2.6
             os: ubuntu-latest
             gemfile: gemfiles/Gemfile-rails.7.0.x
-          - ruby: 2.6
-            os: ubuntu-latest
-            gemfile: gemfiles/Gemfile-rails-edge
+          # - ruby: 2.6
+          #   os: ubuntu-latest
+          #   gemfile: gemfiles/Gemfile-rails-edge
           - ruby: 3.0
             os: ubuntu-latest
             gemfile: gemfiles/Gemfile-rails.5.2.x
